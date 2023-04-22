@@ -126,27 +126,20 @@ class Tree
     ArrayList<Integer> leftView(Node root)
     {
         ArrayList<Integer> ans = new ArrayList<Integer>();
-        if(root==null) return ans;
-        Queue<Node> q = new LinkedList<>();
-        q.offer(root);
-        while(!q.isEmpty())
-        {
-            int size = q.size();
-            boolean flagFirst = true;
-            for(int i=0; i<size; i++)
-            {
-                root = q.poll();
-                if(flagFirst)
-                {
-                    ans.add(root.data);
-                    flagFirst = false;
-                }
-                
-                if(root.left!=null) q.offer(root.left);
-                if(root.right!=null) q.offer(root.right);
-                
-            }
-        }
+        left(root, ans, 0);
         return ans;
+    }
+    
+    void left(Node root, ArrayList<Integer> ans, int level)
+    {
+        if(root==null) return;
+        
+        if(level == ans.size()) 
+        {
+            ans.add(root.data);
+        }
+        
+        left(root.left, ans, level+1);
+        left(root.right, ans, level+1);
     }
 }
