@@ -37,48 +37,34 @@ class Solution {
     public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
         // Code here
         boolean vis[] = new boolean[V];
-        Queue<Pair> q = new LinkedList<>();
+        boolean flag = false;
         for(int i=0; i<V; i++)
         {
             if(!vis[i])
             {
-                q.offer(new Pair(i, -1));
-                vis[i] = true;
-                while(!q.isEmpty())
-                {
-                    Pair p = q.poll();
-                    int val = p.val;
-                    int par = p.par;
-                    for(Integer x: adj.get(val))
-                    {
-                        if(x==par)
-                        {
-                            continue;
-                        }
-                        if(!vis[x])
-                        {
-                            vis[x] = true;
-                            q.offer(new Pair(x, val));
-                        }
-                        else
-                        {
-                            return true;
-                        }
-                    }
-                }
+                flag = dfs(i, -1, vis, adj);
+                if(flag) return true;
             }
+            
         }
         return false;
     }
-    
-    class Pair{
-        int val;
-        int par;
-        Pair(int v, int p)
+    public boolean dfs(int i, int par, boolean vis[], ArrayList<ArrayList<Integer>> adj)
+    {
+        vis[i] = true;
+        for(Integer x: adj.get(i))
         {
-            val = v;
-            par = p;
+            if(x==par) continue;
+            if(!vis[x])
+            {
+                if(dfs(x, i, vis, adj)) return true;
+            }
+            else
+            {
+                return true;
+            }
         }
+        return false;
     }
     
 }
