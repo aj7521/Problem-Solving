@@ -42,9 +42,8 @@ class Solution {
         {
             if(!vis[i])
             {
-                vis[i] = true;
                 q.offer(new Pair(i, -1));
-                
+                vis[i] = true;
                 while(!q.isEmpty())
                 {
                     Pair p = q.poll();
@@ -52,12 +51,16 @@ class Solution {
                     int par = p.par;
                     for(Integer x: adj.get(val))
                     {
+                        if(x==par)
+                        {
+                            continue;
+                        }
                         if(!vis[x])
                         {
                             vis[x] = true;
                             q.offer(new Pair(x, val));
                         }
-                        else if(x!=par)
+                        else
                         {
                             return true;
                         }
