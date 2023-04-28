@@ -64,36 +64,41 @@ class Solution
     static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj) 
     {
         // add your code here
-        Stack<Integer> st = new Stack<>();
-        boolean vis[] = new boolean[V];
+        Queue<Integer> q = new LinkedList<>();
+        int ans [] = new int[V];
+        int indegree[] = new int[V];
+        //take all indegrees
         for(int i=0; i<V; i++)
         {
-            if(!vis[i])
+            for(Integer j: adj.get(i))
             {
-                dfs(i, vis, adj, st);
+                indegree[j]++;
             }
         }
-        
-        int size = st.size();
-        int ans [] = new int[size];
-        for(int i=0; i<size; i++)
+        //push all the 0 indegree elements in the queue
+        for(int i=0; i<V; i++)
         {
-            ans[i] = st.peek();
-            st.pop();
+            if(indegree[i]==0)
+            {
+                q.offer(i);
+            }
+        }
+        //take out the peek element and add to answer
+        int p = 0;
+        while(!q.isEmpty())
+        {
+            int node = q.poll();
+            ans[p++] = node;
+            //and decrement the indegree and push if indegree==0
+            for(Integer i: adj.get(node))
+            {
+                indegree[i]--;
+                if(indegree[i]==0)
+                {
+                    q.offer(i);
+                }
+            }
         }
         return ans;
-    }
-    
-    public static void dfs(int node, boolean vis[], ArrayList<ArrayList<Integer>> adj, Stack<Integer> st)
-    {
-        vis[node] = true;
-        for(Integer i: adj.get(node))
-        {
-            if(!vis[i])
-            {
-                dfs(i, vis, adj, st);
-            }
-        }
-        st.push(node);
     }
 }
