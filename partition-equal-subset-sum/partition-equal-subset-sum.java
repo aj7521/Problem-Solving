@@ -6,23 +6,26 @@ class Solution {
             sum += nums[i];
         }
         if(sum%2!=0) return false;
-        int dp[][] = new int [nums.length][sum/2 + 1];
-        for(int[] row: dp){
-            Arrays.fill(row, -1);
+        int tar = sum/2;
+        int n = nums.length;
+        boolean dp[][] = new boolean [n][tar + 1];
+        
+        for(int i=0; i<n; i++){
+            dp[i][0] = true;
         }
-        return check(nums.length-1, sum/2, nums, dp);
-    }
-
-    public boolean check(int i, int x, int arr[], int dp[][]){
-        if(x==0) return true;
-        if(i==0) return (arr[i]==x);
-        if(dp[i][x]!=-1) return dp[i][x]==0?false:true;;
-        boolean notpick = check(i-1, x, arr, dp);
-        boolean pick = false;
-        if(arr[i]<=x){
-            pick = check(i-1, x-arr[i], arr, dp);
-            dp[i][x]=notpick|pick?1:0;
+        if(nums[0]<=tar){
+            dp[0][nums[0]] = true;
         }
-        return notpick | pick;
+        for(int i=1; i<n; i++){
+            for(int j=1; j<=tar; j++){
+                boolean nt = dp[i-1][j];
+                boolean t = false;
+                if(nums[i]<=j){
+                    t = dp[i-1][j-nums[i]];
+                }
+                dp[i][j] = nt || t;
+            }
+        }
+        return dp[n-1][tar];
     }
 }
