@@ -52,25 +52,20 @@ class Solution
     static int knapSack(int W, int wt[], int val[], int n) 
     { 
          // your code here 
-         int dp[][] = new int[W+1][n];
-         for(int row[]: dp){
-             Arrays.fill(row, -1);
+         int dp[][] = new int[n][W+1];
+         for(int i=wt[0]; i<=W; i++){
+            dp[0][i] = val[0];
          }
-         return count(W, n-1, wt, val, dp);
+         for(int i=1; i<n; i++){
+             for(int j=0; j<=W; j++){
+                int np = dp[i-1][j];
+                int p = 0;
+                if(wt[i]<=j) p = val[i] + dp[i-1][j-wt[i]];
+                dp[i][j] = Math.max(p, np);
+             }
+         }
+         return dp[n-1][W];
     } 
-    
-    static int count(int w, int i, int wt[], int val[], int dp[][]){
-        if(i==0){
-            if(wt[0]<=w) return val[0];
-            else return 0;
-        }
-        if(dp[w][i]!=-1) return dp[w][i];
-        int np = count(w, i-1, wt, val, dp);
-        int p = 0;
-        if(wt[i]<=w) p = val[i] + count(w-wt[i], i-1, wt, val, dp);
-        
-        return dp[w][i] = Math.max(p, np);
-    }
 }
 
 
