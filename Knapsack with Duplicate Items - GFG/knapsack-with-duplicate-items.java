@@ -39,10 +39,22 @@ class Solution{
         int n = N;
         int tar = W;
         int dp[][] = new int[n][tar+1];
-        for(int row[]: dp){
-            Arrays.fill(row, -1);
+        // for(int row[]: dp){
+        //     Arrays.fill(row, -1);
+        // }
+        // return count(n-1, tar, val, wt, dp);
+        for(int i=0; i<tar+1; i++){
+            dp[0][i] = (i/wt[0])*val[0];
         }
-        return count(n-1, tar, val, wt, dp);
+        for(int i=1; i<n; i++){
+            for(int j=0; j<=tar; j++){
+                int np = dp[i-1][j];
+                int p = 0;
+                if(wt[i]<=j) p = val[i] + dp[i][j-wt[i]];
+                dp[i][j] = Math.max(p, np);
+            }
+        }
+        return dp[n-1][tar];
     }
     
     public static int count(int i, int t, int val[], int wt[], int dp[][]){
