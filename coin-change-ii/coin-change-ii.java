@@ -1,17 +1,30 @@
 class Solution {
-    public int change(int tar, int[] coins) {
-        int dp[][] = new int[coins.length][tar+1];
-        int n = coins.length;
-        for(int row[]: dp){
-            Arrays.fill(row, -1);
-        }
+    public int change(int tar, int[] arr) {
+        int dp[][] = new int[arr.length][tar+1];
+        int n = arr.length;
+        // for(int row[]: dp){
+        //     Arrays.fill(row, -1);
+        // }
+        // int val = count(n-1, tar, arr, dp);
+        // return val;
 
-        int val = count(n-1, tar, coins, dp);
-        return val;
+        for(int i=0; i<=tar; i++){
+            if(i%arr[0]==0) dp[0][i] = 1;
+        }
+        
+
+        for(int i=1; i<n; i++){
+            for(int j=0; j<=tar; j++){
+                int np = dp[i-1][j];
+                int p = 0;
+                if(arr[i]<=j) p = dp[i][j-arr[i]];
+                dp[i][j] = np + p;
+            }
+        }
+        return dp[n-1][tar];
     }
 
     public int count(int i, int t, int arr[], int dp[][]){
-        if(t==0) return 1;
         if(i==0){
             if(t%arr[i]==0) return 1;
             else return 0;
