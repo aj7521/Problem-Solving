@@ -24,15 +24,27 @@ class RodCutting {
 class Solution{
     public int cutRod(int price[], int n) {
         //code here
-        int dp[][] = new int[n+1][n+1];
-        for(int row[]: dp){
-            Arrays.fill(row, -1);
+        int dp[][] = new int[n][n+1];
+        // for(int row[]: dp){
+        //     Arrays.fill(row, -1);
+        // }
+        // return count(n-1, n, price, dp);
+        for(int i=0; i<=n; i++){
+            dp[0][i] = i * price[0];
         }
-        return count(n-1, n, price, dp);
+        for(int i=1; i<n; i++){
+            for(int j=0; j<=n; j++){
+                int np = dp[i-1][j];
+                int p = Integer.MIN_VALUE;
+                int curlen = i+1;
+                if(curlen <= j) p = price[i] + dp[i][j-curlen];
+                dp[i][j] = Math.max(p, np);
+            }
+        }
+        return dp[n-1][n];
     }
     
     public int count(int i, int len, int price[], int dp[][]){
-        if(len==0) return 0;
         if(i==0) return len*price[0];
         if(dp[i][len]!=-1) return dp[i][len];
         int np = count(i-1, len, price, dp);
