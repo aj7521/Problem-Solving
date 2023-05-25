@@ -1,29 +1,28 @@
 class Solution {
     public int maxProfit(int[] prices) {
         int n = prices.length;
-        int dp[][] = new int[n+1][2];
-        for(int rows[]: dp){
-            Arrays.fill(rows, -1);
-        }
-        return maxP(0, prices, 1, dp);
-        // dp[0] = dp[1] = 0;
-        // int profit = 0;
-        // for(int i=n-1; i>=0; i--){
-        //     for(int j=0; j<2; j++){
-        //         if(j==1){
-        //             int take = dp[0] - arr[i];
-        //             int ntake = dp[1];
-        //             profit = Math.max(take, ntake);
-        //         }
-        //         else{
-        //             int take = dp[1] + arr[i];
-        //             int ntake = dp[0];
-        //             profit = Math.max(take, ntake);
-        //         }
-        //         dp[j] = profit;
-        //     }
+        int dp[][] = new int[n+2][2];
+        // for(int rows[]: dp){
+        //     Arrays.fill(rows, -1);
         // }
-        // return dp[1];
+        // return maxP(0, prices, 1, dp);
+        int profit = 0;
+        for(int i=n-1; i>=0; i--){
+            for(int j=0; j<2; j++){
+                if(j==1){
+                    int take = dp[i+1][0] - prices[i];
+                    int ntake = dp[i+1][1];
+                    profit = Math.max(take, ntake);
+                }
+                else{
+                    int take = dp[i+2][1] + prices[i];
+                    int ntake = dp[i+1][0];
+                    profit = Math.max(take, ntake);
+                }
+                dp[i][j] = profit;
+            }
+        }
+        return dp[0][1];
     }
 
     public int maxP(int i, int arr[], int buy, int dp[][]){
