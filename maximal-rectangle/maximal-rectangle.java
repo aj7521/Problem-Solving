@@ -2,23 +2,15 @@ class Solution {
     public int maximalRectangle(char[][] matrix) {
         int n = matrix.length;
         int m = matrix[0].length;
-        int mat[][] = new int[n][m];
         int max = Integer.MIN_VALUE;
+        int arr[] = new int[m];
         for(int i=0; i<n; i++){
             for(int j=0; j<m; j++){
-                if(matrix[i][j]=='0') mat[i][j] = 0;
-                else mat[i][j] = 1;
-                if(i>0){
-                    if(mat[i][j]==1){
-                        mat[i][j] += mat[i-1][j];
-                    }
-                    
-                }
+                if(matrix[i][j]=='1') arr[j]++;
+                else arr[j] = 0;
+                System.out.print(arr[j]);
             }
-            int arr[] = new int[m];
-            for(int j=0; j<m; j++){
-                arr[j] = mat[i][j];
-            }
+            System.out.println();
             max = Math.max(lh(arr), max);
         }
         return max;
