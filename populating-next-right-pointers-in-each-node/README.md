@@ -1,4 +1,4 @@
-<p>You are given a <strong>perfect binary tree</strong> where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:</p>
+<h2><a href="https://leetcode.com/problems/populating-next-right-pointers-in-each-node">Populating Next Right Pointers in Each Node</a></h2> <img src='https://img.shields.io/badge/Difficulty-Medium-orange' alt='Difficulty: Medium' /><hr><p>You are given a <strong>perfect binary tree</strong> where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:</p>
 
 <pre>
 struct Node {
