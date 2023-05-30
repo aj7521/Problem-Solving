@@ -87,73 +87,40 @@ class Solution
     public String findOrder(String [] dict, int N, int K)
     {
         // Write your code here
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-        for(int i=0; i<K; i++)
-        {
+        int inorder[] = new int[K];
+        List<List<Integer>> adj = new ArrayList<>();
+        for(int i=0; i<K; i++){
             adj.add(new ArrayList<>());
         }
-        for(int i=0; i<N-1; i++)
-        {
-            String str = dict[i];
-            String ssr = dict[i+1];
-            int len = Math.min(str.length(), ssr.length());
-            for(int j=0; j<len; j++)
-            {
-                if(str.charAt(j) != ssr.charAt(j))
-                {
-                    adj.get(str.charAt(j)-'a').add(ssr.charAt(j)-'a');
+        for(int i=0; i<N-1; i++){
+            String s = dict[i];
+            String t = dict[i+1];
+            int minLen = Math.min(s.length(), t.length());
+            for(int j=0; j<minLen; j++){
+                if(s.charAt(j)!=t.charAt(j)){
+                    adj.get(s.charAt(j)-'a').add(t.charAt(j)-'a');
+                    inorder[t.charAt(j)-'a']++;
                     break;
                 }
             }
         }
-        int res[] = topoSort(K, adj);
-        String ans = new String();
-        for(int i=0; i<res.length; i++)
-        {
-            ans += (char)(res[i] + 97);
-        }
-        return ans;
-    }
-    
-    public int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj) 
-    {
-        // add your code here
         Queue<Integer> q = new LinkedList<>();
-        int ans [] = new int[V];
-        int indegree[] = new int[V];
-        //take all indegrees
-        for(int i=0; i<V; i++)
-        {
-            for(Integer j: adj.get(i))
-            {
-                indegree[j]++;
-            }
-        }
-        //push all the 0 indegree elements in the queue
-        for(int i=0; i<V; i++)
-        {
-            if(indegree[i]==0)
-            {
+        for(int i=0; i<K; i++){
+            if(inorder[i]==0){
                 q.offer(i);
             }
         }
-        //take out the peek element and add to answer
-        int p = 0;
-        while(!q.isEmpty())
-        {
-            int node = q.poll();
-            ans[p++] = node;
-            //and decrement the indegree and push if indegree==0
-            for(Integer i: adj.get(node))
-            {
-                indegree[i]--;
-                if(indegree[i]==0)
-                {
-                    q.offer(i);
+        String ans = "";
+        while(!q.isEmpty()){
+            int temp = q.poll();
+            ans += (char)(temp+97);
+            for(int n: adj.get(temp)){
+                inorder[n]--;
+                if(inorder[n] == 0){
+                    q.offer(n);
                 }
             }
         }
-        
         return ans;
     }
 }
