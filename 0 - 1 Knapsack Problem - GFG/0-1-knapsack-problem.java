@@ -53,19 +53,20 @@ class Solution
     { 
          // your code here 
          int dp[][] = new int[n][W+1];
-         for(int i=wt[0]; i<=W; i++){
-            dp[0][i] = val[0];
+         for(int row[]: dp){
+             Arrays.fill(row, -1);
          }
-         for(int i=1; i<n; i++){
-             for(int j=0; j<=W; j++){
-                int np = dp[i-1][j];
-                int p = 0;
-                if(wt[i]<=j) p = val[i] + dp[i-1][j-wt[i]];
-                dp[i][j] = Math.max(p, np);
-             }
-         }
-         return dp[n-1][W];
-    } 
+         return count(0, W, wt, val, n, dp);
+    }
+    
+    static int count(int i, int W, int w[], int v[], int n, int dp[][]){
+        if(i==n) return 0;
+        if(dp[i][W]!=-1) return dp[i][W];
+        int notPick = count(i+1, W, w, v, n, dp);
+        int pick = 0;
+        if(W >= w[i]) pick = v[i] + count(i+1, W-w[i], w, v, n, dp);
+        return dp[i][W] = Math.max(pick, notPick);
+    }
 }
 
 
