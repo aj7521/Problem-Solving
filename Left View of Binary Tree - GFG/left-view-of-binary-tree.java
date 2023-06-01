@@ -128,21 +128,17 @@ class Tree
       // Your code here
       ArrayList<Integer> ans = new ArrayList<>();
       if(root==null) return ans;
-      Queue<Node> q = new LinkedList<>();
-      q.offer(root);
-      while(!q.isEmpty()){
-          boolean flag = false;
-          int size = q.size();
-          for(int i=0; i<size; i++){
-              Node temp = q.poll();
-              if(flag==false){
-                  flag = true;
-                  ans.add(temp.data);
-              }
-              if(temp.left!=null) q.offer(temp.left);
-              if(temp.right!=null) q.offer(temp.right);
-          }
-      }
+      lv(root, ans, 0);
       return ans;
+    }
+    
+    public void lv(Node root, ArrayList<Integer> ans, int lvl){
+        if(root==null) return;
+        if(lvl==ans.size()){
+            ans.add(root.data);
+        }
+        lv(root.left, ans, lvl+1);
+        lv(root.right, ans, lvl+1);
+        return;
     }
 }
