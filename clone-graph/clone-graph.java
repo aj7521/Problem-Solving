@@ -17,21 +17,22 @@ class Node {
     }
 }
 */
+
 class Solution {
     public Node cloneGraph(Node node) {
-        Map<Node, Node> map = new HashMap<>();
         if(node==null) return node;
+        Map<Node, Node> map = new HashMap<>();
         Queue<Node> q = new LinkedList<>();
         q.offer(node);
-        map.put(node, new Node(node.val, new ArrayList<>()));
+        map.put(node, new Node(node.val, new ArrayList<Node>()));
         while(!q.isEmpty()){
             Node temp = q.poll();
-            for(Node i: temp.neighbors){
-                if(!map.containsKey(i)){
-                    q.offer(i);
-                    map.put(i, new Node(i.val, new ArrayList<>()));
+            for(Node n: temp.neighbors){
+                if(!map.containsKey(n)){
+                    q.offer(n);
+                    map.put(n, new Node(n.val, new ArrayList<Node>()));
                 }
-                map.get(temp).neighbors.add(map.get(i));
+                map.get(temp).neighbors.add(map.get(n));
             }
         }
         return map.get(node);
