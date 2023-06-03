@@ -40,76 +40,51 @@ class Solution {
         // Your Code here
         int n = grid.length;
         int m = grid[0].length;
-        boolean vis[][] = new boolean [n][m];
         Set<String> set = new HashSet<>();
-        for(int i=0; i<n; i++)
-        {
-            for(int j=0; j<m; j++)
-            {
-                ArrayList<Pair> temp = new ArrayList<>();
-                if(!vis[i][j] && grid[i][j]==1)
-                {
-                    dfs(i, j, vis, grid, temp);
-                    addingSet(set, temp);
+        boolean vis[][] = new  boolean[n][m];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(!vis[i][j] && grid[i][j]==1){
+                    String s = bfs(i, j, n, m, grid, vis);
+                    set.add(s);
                 }
             }
         }
-        // for(int i=0; i<n; i++)
-        // {
-        //     for(int j=0; j<m; j++)
-        //     {
-        //         System.out.print(vis[i][j] + " ");
-        //     }
-        //     System.out.println();
-        // }
-        // for(ArrayList<Pair> al: ans)
-        // {
-        //     for(Pair p: al)
-        //     {
-        //         System.out.println(p.r + " " + p.c);
-        //     }
-        //     System.out.println();
-        // }
         return set.size();
     }
-    public void dfs(int r, int c, boolean vis[][], int arr[][], ArrayList<Pair> temp)
-    {
-        vis[r][c] = true;
-        temp.add(new Pair(r,c));
-        int n = arr.length;
-        int m = arr[0].length;
+    public String bfs(int i, int j, int n, int m, int grid[][], boolean vis[][]){
+        vis[i][j] = true;
+        String temp = "";
+        Queue<Pair> q = new LinkedList<>();
+        q.offer(new Pair(i,j));
+        int basei = i;
+        int basej = j;
         int x[] = {0,1,0,-1};
-        int y[] = {-1,0,1,0};
-        for(int i=0; i<4; i++)
-        {
-            int rx = r + x[i];
-            int cx = c + y[i];
-            if(rx>=0 && rx<n && cx>=0 && cx<m && !vis[rx][cx] && arr[rx][cx]==1)
-            {
-                dfs(rx, cx, vis, arr, temp);
+        int y[] = {1,0,-1,0};
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            int r = p.i;
+            int c = p.j;
+            temp += r-basei;
+            temp += c-basej;
+            for(int k=0; k<4; k++){
+                int xa = x[k] + r;
+                int ya = y[k] + c;
+                if(xa>=0 && xa<n && ya>=0 && ya<m && !vis[xa][ya] && grid[xa][ya]==1){
+                    vis[xa][ya] = true;
+                    q.offer(new Pair(xa, ya));
+                }
             }
         }
-    }
-    public void addingSet(Set<String> set, ArrayList<Pair> temp)
-    {
-        String cur = new String();
-        int baseRow = temp.get(0).r;
-        int baseCol = temp.get(0).c;
-        for(Pair p: temp)
-        {
-            int row = p.r - baseRow;
-            int col = p.c - baseCol;
-            cur += row;
-            cur += col;
-        }
-        set.add(cur);
+        return temp;
     }
 }
+
 class Pair{
-    int r; int c;
-    Pair(int rx, int cx)
-    {
-        r = rx;
-        c = cx;
+    int i;
+    int j;
+    Pair(int r, int c){
+        i = r;
+        j = c;
     }
 }
