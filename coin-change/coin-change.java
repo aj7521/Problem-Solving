@@ -1,22 +1,27 @@
 class Solution {
-    public int coinChange(int[] coins, int tar) {
-        int dp[][] = new int[coins.length][tar+1];
+    public int coinChange(int[] coins, int amount) {        
         int n = coins.length;
-        for(int i=0; i<tar+1; i++){
-            if(i%coins[0]==0){
-                dp[0][i] = i/coins[0];
-            }
-            else dp[0][i] = (int)(1e9);
+        int dp[][] = new int[n][amount+1];
+        for(int row[]: dp){
+            Arrays.fill(row, -1);
         }
+        int val = count(n-1, coins, amount, dp);
+        if(val >= (int)(1e9)){
+            return -1;
+        }
+        return val;
+    }
 
-        for(int i=1; i<n; i++){
-            for(int j=0; j<=tar; j++){
-                int np = dp[i-1][j];
-                int p = Integer.MAX_VALUE;
-                if(coins[i]<=j) p = 1 + dp[i][j-coins[i]];
-                dp[i][j] = Math.min(p, np);
-            }
+    public int count(int i, int arr[], int sum, int dp[][]){
+        if(i==0){
+            if(sum%arr[0]==0) return sum/arr[i];
+            else return (int)(1e9);
         }
-        return dp[n-1][tar]>=(int)(1e9)?-1:dp[n-1][tar];
+        if(dp[i][sum]!=-1) return dp[i][sum];
+        int nt = count(i-1, arr, sum, dp);
+        int t = (int)(1e9);
+        if(arr[i]<=sum) t = 1 + count(i, arr, sum-arr[i], dp);
+
+        return dp[i][sum] = Math.min(t, nt);
     }
 }
