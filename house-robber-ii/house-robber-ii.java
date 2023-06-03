@@ -2,36 +2,20 @@ class Solution {
     public int rob(int[] nums) {
         int n = nums.length;
         if(n==1) return nums[0];
-        int arr1[] = new int[n-1];
-        int arr2[] = new int[n-1];
-        for(int i=0; i<nums.length-1; i++)
-        {
-            arr1[i] = nums[i];
-            System.out.print(arr1[i] + " ");
-        }
-        int p = 0;
-        System.out.println();
-        for(int i=1; i<nums.length; i++)
-        {
-            arr2[p] = nums[i];
-            System.out.print(arr2[p] + " ");
-            p++;
-        }
-        return Math.max(check(arr1), check(arr2));
+        int dp[] = new int[n];
+        Arrays.fill(dp, -1);
+        int first = count(n-2, 0, nums, dp);
+        Arrays.fill(dp, -1);
+        int second = count(n-1, 1, nums, dp);
+        return Math.max(first, second);
     }
 
-    public int check(int arr[])
-    {
-        int prev = arr[0];
-        int prev2 = 0;
-        for(int i=1; i<arr.length; i++){
-            int np = prev;
-            int p = arr[i];
-            if(i>1) p+=prev2;
-            int cur = Math.max(np, p);
-            prev2 = prev;
-            prev = cur;
-        }
-        return prev;
+    public int count(int i, int last, int arr[], int dp[]){
+        if(i<last) return 0;
+        if(i==last) return arr[i];
+        if(dp[i]!=-1) return dp[i];
+        int nt = count(i-1, last, arr, dp);
+        int t = arr[i] + count(i-2, last, arr, dp);
+        return dp[i] = Math.max(t, nt);
     }
 }
