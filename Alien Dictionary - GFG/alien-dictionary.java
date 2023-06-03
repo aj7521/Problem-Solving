@@ -87,25 +87,30 @@ class Solution
     public String findOrder(String [] dict, int N, int K)
     {
         // Write your code here
-        int inorder[] = new int[K];
+        int n = K;
+        int k = N;
         List<List<Integer>> adj = new ArrayList<>();
-        for(int i=0; i<K; i++){
+        for(int i=0; i<n; i++){
             adj.add(new ArrayList<>());
         }
-        for(int i=0; i<N-1; i++){
-            String s = dict[i];
-            String t = dict[i+1];
-            int minLen = Math.min(s.length(), t.length());
-            for(int j=0; j<minLen; j++){
-                if(s.charAt(j)!=t.charAt(j)){
-                    adj.get(s.charAt(j)-'a').add(t.charAt(j)-'a');
-                    inorder[t.charAt(j)-'a']++;
+        int inorder[] = new int[n];
+        for(int j=0; j<k-1; j++){
+            String s1 = dict[j];
+            String s2 = dict[j+1];
+            int len = Math.min(s1.length(), s2.length());
+            for(int i=0; i<len; i++){
+                if(s1.charAt(i)!=s2.charAt(i)){
+                    int first = s1.charAt(i) - 97;
+                    int second = s2.charAt(i) - 97;
+                    adj.get(first).add(second);
+                    inorder[second]++;
                     break;
                 }
             }
         }
+        
         Queue<Integer> q = new LinkedList<>();
-        for(int i=0; i<K; i++){
+        for(int i=0; i<n; i++){
             if(inorder[i]==0){
                 q.offer(i);
             }
@@ -114,10 +119,10 @@ class Solution
         while(!q.isEmpty()){
             int temp = q.poll();
             ans += (char)(temp+97);
-            for(int n: adj.get(temp)){
-                inorder[n]--;
-                if(inorder[n] == 0){
-                    q.offer(n);
+            for(int i: adj.get(temp)){
+                inorder[i]--;
+                if(inorder[i]==0){
+                    q.offer(i);
                 }
             }
         }
