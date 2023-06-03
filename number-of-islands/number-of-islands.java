@@ -2,40 +2,30 @@ class Solution {
     public int numIslands(char[][] grid) {
         int n = grid.length;
         int m = grid[0].length;
+        int count = 0;
         boolean vis[][] = new boolean[n][m];
-        int numOfIslands = 0;
         for(int i=0; i<n; i++){
             for(int j=0; j<m; j++){
-                if(!vis[i][j] && grid[i][j] == '1'){
-                    numOfIslands++;
-                    dfs(i, j, n, m, vis, grid);
+                if(!vis[i][j] && grid[i][j]=='1'){
+                    count++;
+                    dfs(i, j, n, m, grid, vis);
                 }
             }
         }
-        return numOfIslands;
+        return count;
     }
-    
-    public void dfs(int i, int j, int n, int m, boolean vis[][], char grid[][]){
+
+    public void dfs(int i, int j, int n, int m, char grid[][], boolean vis[][]){
         vis[i][j] = true;
-        
-        int x[] = {0,1,0,-1};
-        int y[] = {1,0,-1,0};
-        for(int a=0; a<x.length; a++){
-            int xa = i + x[a];
-            int ya = j + y[a];
-            if(xa>=0 && xa<n && ya>=0 && ya<m && !vis[xa][ya] && grid[xa][ya]=='1'){
-                dfs(xa, ya, n, m, vis, grid);
+        int x[] = {-1,0,1,0};
+        int y[] = {0,-1,0,1};
+        for(int r=0; r<4; r++){
+            int xa = x[r] + i;
+            int ya = y[r] + j;
+            if(xa>=0 && xa<n && ya>=0 && ya<m && grid[xa][ya]=='1' && !vis[xa][ya]){
+                dfs(xa, ya, n, m, grid, vis);
             }
         }
         return;
-    }
-
-}
-class Pair{
-    int x;
-    int y;
-    Pair(int i, int j){
-        x = i;
-        y = j;
     }
 }
