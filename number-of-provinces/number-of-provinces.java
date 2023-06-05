@@ -7,29 +7,27 @@ class Solution {
         }
         for(int i=0; i<n; i++){
             for(int j=0; j<n; j++){
-                if(i==j) continue;
-                if(isConnected[i][j]==1){
+                if(isConnected[i][j]==1 && i!=j){
                     adj.get(i).add(j);
                 }
-                
             }
         }
+        int pro = 0;
         boolean vis[] = new boolean[n];
-        int ans = 0;
         for(int i=0; i<n; i++){
             if(!vis[i]){
-                ans++;
-                dfs(i, adj, vis);
+                pro++;
+                dfs(i, vis, adj);
             }
         }
-        return ans;
+        return pro;
     }
 
-    public void dfs(int i, List<List<Integer>> adj, boolean vis[]){
+    public void dfs(int i, boolean vis[], List<List<Integer>> adj){
         vis[i] = true;
-        for(Integer ele: adj.get(i)){
-            if(!vis[ele]){
-                dfs(ele, adj, vis);
+        for(int j: adj.get(i)){
+            if(!vis[j]){
+                dfs(j, vis, adj);
             }
         }
         return;
