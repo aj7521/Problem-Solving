@@ -1,23 +1,16 @@
 class Solution {
-    public char nextGreatestLetter(char[] letters, char target) {
-        int ch[] = new int[26];
-        char c = find(ch, letters, target);
-        if(c=='0'){
-            return letters[0];
+    public char nextGreatestLetter(char[] a, char x) {
+        int n = a.length;
+        if (x >= a[n - 1])   x = a[0];
+        else    x++;
+        
+        int lo = 0, hi = n - 1;
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+            if (a[mid] == x)    return a[mid];
+            if (a[mid] < x)     lo = mid + 1;
+            else    hi = mid;
         }
-        return c;
-    }
-
-    public char find(int ch[], char[] letters, char target){
-        for(int i=0; i<letters.length; i++){
-            ch[(int)(letters[i])-97]++;
-        }
-        int tar = (int)(target)-97;
-        for(int i=0; i<ch.length; i++){
-            if(i>tar && ch[i]>0){
-                return (char)(i+97);
-            }
-        }
-        return '0';
+        return a[hi];
     }
 }
