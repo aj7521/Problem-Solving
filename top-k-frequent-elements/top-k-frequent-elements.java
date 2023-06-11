@@ -1,44 +1,37 @@
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
-        int ans [] = new int[k];
-        PriorityQueue<Pair> pq = new PriorityQueue<Pair>((a,b)->(b.count-a.count));
-        HashMap<Integer, Integer> hm = new HashMap<>();
-        for(int i=0; i<nums.length; i++)
-        {
-            if(hm.containsKey(nums[i]))
-            {
-                int n = hm.get(nums[i]);
-                hm.put(nums[i], n+1);
+        HashMap<Integer, Integer> map = new HashMap<>();
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a,b)->a.freq-b.freq);
+        for(int i=0; i<nums.length; i++){
+            if(map.containsKey(nums[i])){
+                map.put(nums[i], map.get(nums[i])+1);
             }
-            else
-            {
-                hm.put(nums[i], 1);
+            else{
+                map.put(nums[i], 1);
             }
         }
-        for(Map.Entry<Integer, Integer> map: hm.entrySet())
-        {
-            int val = map.getKey();
-            int count = map.getValue();
-            Pair p = new Pair(val, count);
-            pq.add(p);
+
+        for(Map.Entry<Integer, Integer> mp: map.entrySet()){
+            pq.offer(new Pair(mp.getValue(), mp.getKey()));
+            if(pq.size()>k){
+                pq.poll();
+            }
         }
+        int ans[] = new int[k];
         int p = 0;
-        while(p<k)
-        {
-            int v = pq.poll().val;
-            ans[p] = v;
-            p++;
+        while(!pq.isEmpty()){
+            ans[p++] = pq.poll().val;
         }
         return ans;
     }
+
 }
 
 class Pair{
+    int freq;
     int val;
-    int count;
-    Pair(int v, int c)
-    {
-        val = v;
-        count = c;
+    Pair(int _freq, int _val){
+        freq = _freq;
+        val = _val;
     }
 }
