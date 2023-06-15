@@ -1,15 +1,16 @@
 class Solution {
     public int missingNumber(int[] nums) {
-        int pos = 0;
-        while(pos < nums.length){
-            if(nums[pos] < nums.length && nums[pos] != nums[nums[pos]]){
-                swap(nums, pos, nums[pos]);
-            }else{
-                pos++;
+        int i = 0;
+        while(i<nums.length){
+            if(nums[i]==i || nums[i]==nums.length){
+                i++;
+            }
+            else{
+                swap(nums, i, nums[i]);
             }
         }
-        for(int j = 0; j < nums.length; j++){
-            if(nums[j] != j){
+        for(int j=0; j<nums.length; j++){
+            if(nums[j]!=j){
                 return j;
             }
         }
@@ -20,5 +21,6 @@ class Solution {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
+        return;
     }
 }
