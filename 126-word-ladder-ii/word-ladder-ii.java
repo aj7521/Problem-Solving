@@ -1,64 +1,71 @@
 class Solution {
     public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
-        Set<String> wordDict = new HashSet<>(wordList);
-        List<List<String>> results = new ArrayList<>();
-        if (!wordDict.contains(endWord)) return results;
+        Queue<String> queue = new LinkedList<>();
+        Map<String, List<String>> map = new HashMap<>();
+        Map<String, Integer> levelMap = new HashMap<>();
+        List<List<String>> results = new LinkedList<>();
 
-        // Create a map to store the path from start to each node
-        Map<String, ArrayList<String>> map = new HashMap<>();
+        Set<String> visited = new HashSet<>();
+        Set<String> wordSet = new HashSet<>(wordList);
 
-        // Use a set to store the words of current level
-        Set<String> currentLevel = new HashSet<>();
+        if (beginWord.equals(endWord) || !wordSet.contains(endWord))
+            return results;
 
-        // BFS to construct the path graph
-        boolean found = false;
-        currentLevel.add(beginWord);
-        while (!currentLevel.isEmpty() && !found) {
-            wordDict.removeAll(currentLevel); // Remove the used word in wordDict
-            Set<String> nextLevel = new HashSet<>();
-            for (String currentWord : currentLevel) {
-                ArrayList<String> nextWords = getNextWords(currentWord, wordDict);
-                for (String nextWord : nextWords) {
-                    if (nextWord.equals(endWord)) found = true;
-                    map.putIfAbsent(nextWord, new ArrayList<>());
-                    map.get(nextWord).add(currentWord);
-                    nextLevel.add(nextWord);
+        queue.offer(beginWord);
+        map.put(beginWord, new ArrayList<>());
+
+        int min = Integer.MAX_VALUE;
+        int level = 0;
+
+        while (!queue.isEmpty()) {
+            int levelCount = queue.size();
+            level++;
+            for (int i = 0; i < levelCount; i++) {
+                String curr = queue.poll();
+                if (visited.contains(curr) || min < level)
+                    continue;
+                visited.add(curr);
+                if (endWord.equals(curr)) {
+                    min = level;
+                    continue;
                 }
+
+                for (int j = 0; j < curr.length(); j++) {
+                    char[] currArr = curr.toCharArray();
+                    for (int k = 'a'; k <= 'z'; k++) {
+                        currArr[j] = (char) k;
+                        String newWord = new String(currArr);
+                        if (wordSet.contains(newWord) && !visited.contains(newWord)
+                                && !(levelMap.getOrDefault(newWord, level) < level)) {
+                            map.computeIfAbsent(newWord, key -> new ArrayList<>()).add(curr);
+                            queue.offer(newWord);
+                            levelMap.put(newWord, level);
+                        }
+                    }
+                }
+
             }
-            currentLevel = nextLevel;
         }
 
-        // Backtrack to construct paths
-        if (found) backtrack(endWord, beginWord, map, new ArrayList<>(), results);
+        List<String> curr = new LinkedList<>();
+        curr.add(endWord);
+
+        backtrack(endWord, beginWord, map, results, curr);
 
         return results;
     }
 
-    private ArrayList<String> getNextWords(String word, Set<String> wordDict) {
-        ArrayList<String> nextWords = new ArrayList<>();
-        StringBuilder sb = new StringBuilder(word);
-        for (int i = 0; i < sb.length(); i++) {
-            char originalChar = sb.charAt(i);
-            for (char c = 'a'; c <= 'z'; c++) {
-                sb.setCharAt(i, c);
-                String newWord = sb.toString();
-                if (wordDict.contains(newWord)) nextWords.add(newWord);
-            }
-            sb.setCharAt(i, originalChar);
-        }
-        return nextWords;
-    }
-
-    private void backtrack(String word, String beginWord, Map<String, ArrayList<String>> map, ArrayList<String> temp, List<List<String>> results) {
-        temp.add(0, word);
-        if (word.equals(beginWord)) {
-            results.add(new ArrayList<>(temp));
-            temp.remove(0);
+    private void backtrack(String end, String begin, Map<String, List<String>> map, List<List<String>> results,
+            List<String> curr) {
+        if (end.equals(begin)) {
+            results.add(new ArrayList<>(curr));
             return;
         }
-        for (String next : map.get(word)) {
-            backtrack(next, beginWord, map, temp, results);
+
+        for (String s : map.getOrDefault(end, new ArrayList<>())) {
+            curr.addFirst(s);
+            backtrack(s, begin, map, results, curr);
+            curr.removeFirst();
         }
-        temp.remove(0);
     }
 }
