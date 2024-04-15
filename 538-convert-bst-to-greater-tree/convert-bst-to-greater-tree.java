@@ -14,27 +14,16 @@
  * }
  */
 class Solution {
-
+    int sum = 0;
     public TreeNode convertBST(TreeNode root) {
-        sum(root, 0);
+        reverseTraverse(root);
         return root;
     }
-    public int sum(TreeNode root, int sum) {
-
-        if (root == null) return 0;
-
-        int right = sum(root.right, sum);
-
-        if (right == 0) {
-            sum = root.val + sum;
-        } else {
-            sum = root.val + right;
-        }
-
-        root.val = sum;     
-
-        int left = sum(root.left, sum);
-        return left == 0 ? sum : left;
-        
+    public void reverseTraverse(TreeNode root) {
+        if(root == null) return;
+        convertBST(root.right);
+        sum += root.val;
+        root.val = sum;
+        convertBST(root.left);
     }
 }
