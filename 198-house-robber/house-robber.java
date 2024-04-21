@@ -1,9 +1,17 @@
 class Solution {
-    public int rob(int[] nums) {
-        int n = nums.length;
+    public int rob(int[] arr) {
+        int n = arr.length;
         int[] dp = new int[n+1];
-        Arrays.fill(dp, -1);
-        return get(n-1, nums, dp);
+        dp[0] = arr[0];
+        for(int i=1; i<n; i++){
+            int np = dp[i-1];
+            int p = arr[i];
+            if(i>1) p += dp[i-2];
+            dp[i] = Math.max(p, np);
+        }
+        return dp[n-1];
+        // Arrays.fill(dp, -1);
+        // return get(n-1, nums, dp);
     }
 
     public int get(int i, int arr[], int dp[]){
