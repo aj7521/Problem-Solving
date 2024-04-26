@@ -35,7 +35,6 @@ class Solution {
     public void merge(int a, int b){
         par[b] = a;
         size[a] += size[b];
-        size[b] = 0;
     }
 
     public int findPar(int a){
