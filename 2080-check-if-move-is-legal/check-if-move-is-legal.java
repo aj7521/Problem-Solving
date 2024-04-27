@@ -1,15 +1,12 @@
 class Solution {
     public boolean checkMove(char[][] board, int r, int c, char color) {
-        
-      return 
-         dfs(board, r, c, color, 1, 1,0)    
-      || dfs(board, r, c, color, 1, -1, 0)
-      || dfs(board, r, c, color, 1, 0, 0)
-      || dfs(board, r, c, color, 0, -1, 0)
-      || dfs(board, r, c, color, 0, 1, 0)
-      || dfs(board, r, c, color, -1, -1, 0)
-      || dfs(board, r, c, color, -1, 0, 0)
-      || dfs(board, r, c, color, -1, 1, 0);
+        boolean flag = false;
+        for(int i=-1; i<=1; i++){
+            for(int j=-1; j<=1; j++){
+                flag = flag || dfs(board, r, c, color, i, j, 0);
+            }
+        }
+        return flag;
         
     }
      private boolean dfs(char[][] board, int r, int c, char color, int r2, int c2, int count) {
