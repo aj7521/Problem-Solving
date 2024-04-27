@@ -1,48 +1,49 @@
 class Solution {
     public int shortestPathBinaryMatrix(int[][] grid) {
         int n = grid.length;
-        PriorityQueue<Tuple> pq = new PriorityQueue<>((a,b)->a.w-b.w);
-        boolean[][] vis = new boolean[n][n];
-        if(grid[0][0]==0){
-            pq.offer(new Tuple(0,0,0));
-            vis[0][0] = true;
+        if(grid[0][0]==1) return -1;
+        int[][] path = new int[n][n];
+        for(int[] pa: path){
+            Arrays.fill(pa, (int)(1e9));
         }
-        int min = Integer.MAX_VALUE;
+        Queue<Pair> pq = new LinkedList<>();
+        pq.offer(new Pair(0,0,0));
         while(!pq.isEmpty()){
             int size = pq.size();
-            for(int i=0; i<size; i++){
-                Tuple t = pq.poll();
-                int row = t.r;
-                int col = t.c;
-                int dis = t.w;
-                if(row==n-1 && col==n-1){
-                    min = Math.min(min, dis);
+            for(int l=0; l<size; l++){
+                Pair p = pq.poll();
+                int dist = p.d;
+                int r = p.r;
+                int c = p.c;
+                if(r==n-1 && c==n-1)
+                {
+                    return dist+1;
                 }
-                for(int r=-1; r<=1; r++){
-                    for(int c=-1; c<=1; c++){
-                        int ra = row + r;
-                        int ca = col + c;
-                        if(ra>=0 && ra<n && ca>=0 && ca<n && !vis[ra][ca] && grid[ra][ca]==0){
-                            vis[ra][ca] = true;
-                            pq.offer(new Tuple(ra, ca, dis+1));
+                for(int i=-1; i<=1; i++){
+                    for(int j=-1; j<=1; j++){
+                        if(i==0 && j==0) continue;
+                        int x = r + i;
+                        int y = c + j;
+                        if(x>=0 && x<n && y>=0 && y<n && grid[x][y]==0){
+                            if(path[x][y] > dist+1){
+                                path[x][y] = dist+1;
+                                pq.offer(new Pair(dist+1, x, y));
+                            }
                         }
                     }
                 }
             }
         }
-        if(min == Integer.MAX_VALUE){
-            return -1;
-        }
-        return min+1;
+        return -1;
     }
 }
-class Tuple{
+class Pair{
+    int d;
     int r;
     int c;
-    int w;
-    Tuple(int ra, int ca, int wa){
+    Pair(int da, int ra, int ca){
+        d = da;
         r = ra;
         c = ca;
-        w = wa;
     }
 }
