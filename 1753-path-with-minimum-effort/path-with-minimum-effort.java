@@ -2,50 +2,43 @@ class Solution {
     public int minimumEffortPath(int[][] heights) {
         int n = heights.length;
         int m = heights[0].length;
-        int dist[][] = new int[n][m];
-        for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
-                dist[i][j] = (int)(1e9);
-            }
+        int[][] path = new int[n][m];
+        for(int[] pa: path){
+            Arrays.fill(pa, (int)(1e9));
         }
-        dist[0][0] = 0;
-        int x[] = {0,1,0,-1};
-        int y[] = {-1,0,1,0};
-        PriorityQueue<Tuple> pq = new PriorityQueue<>((a,b)->a.d-b.d);
-        pq.offer(new Tuple(0,0,0));
-        while(!pq.isEmpty())
-        {
-            Tuple t = pq.poll();
-            int d = t.d;
-            int r = t.r;
-            int c = t.c;
-            if(r==n-1 && c==m-1) return d;
-            for(int i=0; i<x.length; i++)
-            {
-                int xa = r + x[i];
-                int ya = c + y[i];
-                if(xa>=0 && xa<n && ya>=0 && ya<m)
-                {
-                    int da = Math.max(d, Math.abs(heights[xa][ya] - heights[r][c]));
-                    if(dist[xa][ya] > da)
-                    {
-                        dist[xa][ya] = da;
-                        pq.offer(new Tuple(da,xa,ya));
-                    }                  
+        path[0][0] = 0;
+        int xa[] = {0,-1,0,1};
+        int ya[] = {1,0,-1,0};
+        Queue<Pair> q = new LinkedList<>();
+        q.offer(new Pair(0, 0, 0));
+        while(!q.isEmpty()){
+            int size = q.size();
+            for(int i=0; i<size; i++){
+                Pair p = q.poll();
+                int d = p.d;
+                int r = p.r;
+                int c = p.c;
+                for(int j=0; j<4; j++){
+                    int x = r + xa[j];
+                    int y = c + ya[j];
+                    if(x>=0 && x<n && y>=0 && y<m){
+                        int curD = Math.max(d, Math.abs(heights[x][y]-heights[r][c]));
+                        if(path[x][y] > curD){
+                            path[x][y] = curD;
+                            q.offer(new Pair(curD, x, y));
+                        }
+                    }
                 }
             }
         }
-        return 0;
+        return path[n-1][m-1];
     }
 }
-class Tuple{
-    int d;
-    int r;
-    int c;
-    Tuple(int ds, int rs, int cs)
-    {
-        d = ds;
-        r = rs;
-        c = cs;
+class Pair{
+    int d, r, c;
+    Pair(int da, int ra, int ca){
+        d = da;
+        r = ra;
+        c = ca;
     }
 }
