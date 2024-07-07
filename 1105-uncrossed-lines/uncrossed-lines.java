@@ -11,12 +11,9 @@ class Solution {
     public int maxLines(int[] arr, int i, int[] ar2, int j, int[][] dp){
         if(i<0 || j<0) return 0;
         if(dp[i][j]!=-1) return dp[i][j];
-        int left = 0;
         if(arr[i]==ar2[j]){
-            left += (1 + maxLines(arr, i-1, ar2, j-1, dp));
+            return 1 + maxLines(arr, i-1, ar2, j-1, dp);
         }
-        int upL = maxLines(arr, i-1, ar2, j, dp);
-        int doL = maxLines(arr, i, ar2, j-1, dp);
-        return dp[i][j] = Math.max(upL, Math.max(left, doL));
+        return dp[i][j] = Math.max(maxLines(arr, i-1, ar2, j, dp), maxLines(arr, i, ar2, j-1, dp));
     }
 }
